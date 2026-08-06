@@ -1,0 +1,795 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{float}
+
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{UTEQ -- Ingeniería de Requerimientos (ISR-401 / 20303)}
+\fancyhead[R]{PE4 -- CarniCore -- Práctica Experimental Unidad IV}
+\fancyfoot[C]{\thepage}
+
+\title{
+\vspace{-2cm}
+\textbf{Práctica Experimental Unidad IV}\\[0.3cm]
+\Large Validación, Gestión de Requisitos y Herramientas CASE\\[0.2cm]
+\large Sistema CarniCore -- Sistema de Trazabilidad, Pesaje Inteligente e Inventario para\\
+Distribuidora de Cárnicos Pucayacu -- La Maná, Cotopaxi\\[0.4cm]
+\normalsize Asignatura: Ingeniería de Requerimientos [20303] -- 4to Nivel\\
+Estándares: ISO/IEC/IEEE 29148:2018 -- ISO/IEC/IEEE 15288:2023 -- ISO/IEC/IEEE 12207:2017\\
+Repositorio del equipo: \url{https://github.com/cperezr3/ISR401-PFC-ERS-GrupoC}
+}
+\author{Universidad Técnica Estatal de Quevedo (UTEQ)\\Facultad de Ciencias de la Computación -- Carrera de Ingeniería de Software (Rediseño)}
+\date{Semana 14 -- Año lectivo 2026--2027 PPA}
+
+\begin{document}
+\begin{titlepage}
+    \centering
+
+    \textbf{\large UNIVERSIDAD TÉCNICA ESTATAL DE QUEVEDO}\\[0.5cm]
+
+    \textbf{FACULTAD DE CIENCIAS DE LA COMPUTACIÓN}\\
+    \textbf{CARRERA DE INGENIERÍA DE SOFTWARE (REDISEÑO)}\\[0.8cm]
+
+    \textbf{INGENIERÍA DE REQUERIMIENTOS (ISR-401)}\\[0.5cm]
+
+    \textbf{TEMA:}\\[0.3cm]
+
+    PRÁCTICA EXPERIMENTAL UNIDAD IV: VALIDACIÓN, GESTIÓN DE REQUISITOS Y HERRAMIENTAS CASE -- SISTEMA CARNICORE.\\[0.5cm]
+
+    \textbf{GRUPO:}\\[0.3cm]
+    GRUPO C\\[0.5cm]
+
+    \textbf{INTEGRANTES:}\\[0.5cm]
+    CALLE DELGADO KAMILA ANNABELLA\\[0.3cm]
+    MACIAS HERRERA JOSTHYN ESTEBAN\\[0.3cm]
+    PEREZ RUIZ CARLOS ANDRES\\[0.5cm]
+
+    \textbf{ASIGNATURA:}\\[0.3cm]
+    INGENIERÍA DE REQUERIMIENTOS [20303]\\[0.3cm]
+
+    \textbf{CURSO:}\\[0.3cm]
+    4TO NIVEL -- SOFTWARE\\[0.3cm]
+
+    \textbf{UNIDAD / SEMANA:}\\[0.3cm]
+    UNIDAD IV -- ENTREGA SEMANA 14\\[0.3cm]
+
+    \textbf{DOCENTE:}\\[0.3cm]
+    ING. GUERRERO ULLOA GLEISTON CICERÓN, PhD\\[0.5cm]
+
+    \textbf{REPOSITORIO DEL EQUIPO:}\\[0.2cm]
+    \url{https://github.com/cperezr3/ISR401-PFC-ERS-GrupoC}\\[0.5cm]
+
+    \vfill
+
+\end{titlepage}
+
+\newpage
+\section*{Historial de Versiones del Informe}
+\begin{longtable}{|p{1.5cm}|p{2.2cm}|p{3cm}|p{8cm}|}
+\hline
+\textbf{Versión} & \textbf{Fecha} & \textbf{Autor(es)} & \textbf{Descripción del cambio} \\
+\hline
+0.1 & Semana 14 & Equipo Grupo C & Fundamento teórico, metodología de la práctica, comparativa de herramientas CASE, comparativa IR tradicional/ágil y estructura normalizada de los Anexos A--F, conforme a la Rúbrica PE4. \\
+\hline
+1.0 & Semana 14 & Equipo Grupo C & Consolidación del informe con los registros de la inspección Fagan, las correcciones aplicadas, las tres solicitudes de cambio (RFC), el acta del CCB y la línea base publicada en el repositorio. \\
+\hline
+\end{longtable}
+
+\newpage
+\tableofcontents
+\newpage
+
+%======================================================
+\section{Resumen y Objetivos}
+%======================================================
+\subsection{Resumen}
+Este informe documenta la Práctica Experimental Unidad IV del proyecto CarniCore, centrada en la validación formal, la gestión del cambio y la trazabilidad de la Especificación de Requisitos de Software (ERS) elaborada en la Entrega 2A \cite{iso29148}. El equipo Grupo C ejecuta una inspección de tipo Fagan sobre el ERS vigente, tramita tres solicitudes formales de cambio ante un Comité de Control de Cambios (CCB) simulado, construye la trazabilidad bidireccional del ERS en una herramienta CASE de gestión y establece una línea base versionada mediante Git. El informe cierra con una comparativa de herramientas CASE, una contraposición entre la Ingeniería de Requisitos (IR) documental y la IR ágil, y conclusiones críticas derivadas de la ejecución de la práctica sobre el sistema CarniCore.
+
+\subsection{Objetivo general}
+Aplicar técnicas formales de validación de requisitos, gestionar cambios mediante un Comité de Control de Cambios simulado, implementar la trazabilidad del ERS en una herramienta CASE, establecer una línea base con Git y comparar metodológicamente la Ingeniería de Requisitos tradicional frente a la ágil, sobre el ERS real del proyecto CarniCore.
+
+\subsection{Objetivos específicos}
+\begin{enumerate}[nosep]
+\item Ejecutar una inspección formal tipo Fagan sobre el ERS de CarniCore, con roles diferenciados, lista de verificación y registro de defectos.
+\item Calcular e interpretar métricas de inspección: densidad de defectos, distribución por tipo y severidad, y tasa de corrección.
+\item Tramitar tres solicitudes formales de cambio (RFC) con análisis de impacto sustentado en la matriz de trazabilidad del ERS.
+\item Deliberar y decidir en un CCB simulado, dejando acta motivada y versión actualizada del ERS.
+\item Construir la trazabilidad bidireccional del ERS en una herramienta CASE de gestión, con campos personalizados y enlaces verificables.
+\item Establecer y publicar la línea base del ERS con control de versiones semántico, tag anotado y \texttt{CHANGELOG.md}.
+\item Comparar herramientas CASE de IR y contrastar la IR tradicional frente a la IR ágil, cerrando con conclusiones críticas propias del equipo.
+\end{enumerate}
+
+%======================================================
+\section{Fundamento Teórico}
+%======================================================
+
+\subsection{Marco normativo}
+La validación de requisitos se ubica formalmente en la cláusula 6.4 del proceso de análisis de requisitos de ISO/IEC/IEEE~29148:2018, que exige verificar que cada requisito sea no ambiguo, completo, consistente, verificable, trazable y factible antes de que el ERS se declare apto para las siguientes fases del ciclo de vida \cite{iso29148}. Los procesos de control de cambios sobre los que se apoya el Paso 2 de esta práctica están normados por ISO/IEC/IEEE~15288:2023 en su proceso técnico de gestión de la configuración, que exige un registro formal de solicitudes, un análisis de impacto y una autoridad de decisión antes de modificar un artefacto bajo control de versiones \cite{iso15288}, y por ISO/IEC/IEEE~12207:2017, que particulariza ese mismo proceso para artefactos de software y establece la obligatoriedad de una línea base verificable como precondición de cualquier cambio posterior \cite{iso12207}. El modelo de calidad de producto de ISO/IEC~25010:2023 aporta el vocabulario con el que este informe clasifica los defectos y los requisitos no funcionales afectados por las RFC, en particular las características de adecuación funcional, fiabilidad y mantenibilidad \cite{iso25010}. La Guía SWEBOK v4.0, capítulos 1.6 a 1.8, enmarca la validación y la gestión de requisitos como dos de las áreas de conocimiento nucleares de la disciplina, distinguiéndolas de la elicitación y el análisis ya cubiertos en entregas previas \cite{swebok2024}. La Parte V de Pohl \cite{pohl2010} desarrolla el ciclo completo de gestión de requisitos --trazabilidad, gestión del cambio y gestión de versiones-- que estructura los Pasos 2 a 4 de esta práctica. Finalmente, el Comité de Control de Cambios que delibera en el Paso 2 sigue el rol y la composición que la 7.\textsuperscript{a} edición del PMBOK asigna a la gobernanza del cambio dentro de un proyecto: una instancia colegiada que evalúa impacto, costo y riesgo antes de aprobar, condicionar, rechazar o diferir una solicitud \cite{pmbok2021}.
+
+\subsection{Validación de requisitos}
+La verificación responde a la pregunta \textit{¿el ERS se construyó correctamente?}, comprobando conformidad con la plantilla y el estándar; la validación responde a \textit{¿se construyó el ERS correcto?}, comprobando que el conjunto de requisitos documentados resuelve efectivamente el problema del cliente \cite{iso29148,pohl2010}. Esta misma distinción, junto con las técnicas de validación y el rol de la inspección formal dentro del ciclo de vida de los requisitos, forma parte del temario base para la certificación profesional en Ingeniería de Requisitos \cite{ireb2022}. Entre las técnicas de validación disponibles --revisión informal, \textit{walkthrough}, inspección formal, prototipado y listas de verificación estructuradas-- la inspección Fagan es la única que define roles diferenciados, una preparación individual obligatoria y un registro cuantificado de defectos con clasificación por tipo y severidad \cite{fagan1976inspections}.
+
+El método Fagan original consta de seis fases: planificación (selección del material y de los participantes), presentación general (\textit{overview}), preparación individual, reunión de inspección, retrabajo y seguimiento \cite{fagan1976inspections}. Los cuatro roles centrales son el Moderador, que planifica y conduce sin evaluar el contenido; el Lector, que parafrasea el documento sección por sección para forzar una comprensión activa distinta de la lectura literal; y dos Inspectores, que revisan de forma independiente antes de la reunión y aportan una perspectiva de detección distinta (por ejemplo, la del diseñador y la del usuario) \cite{fagan1976inspections}. Esta práctica adapta el método a seis propiedades de calidad del requisito --ambigüedad, completitud, consistencia, verificabilidad, trazabilidad y factibilidad-- derivadas directamente de los atributos de un ERS de calidad según ISO/IEC/IEEE~29148:2018 \cite{iso29148}, que constituyen el criterio de clasificación del Anexo A y del registro de defectos del Anexo B.
+
+Las métricas de inspección exigidas por la práctica --densidad de defectos (defectos por página), distribución por tipo y severidad, tasa de detección por inspector y esfuerzo en horas-persona-- provienen del cuerpo de conocimiento sobre inspecciones de software originado por Fagan y consolidado posteriormente en SWEBOK \cite{fagan1976inspections,swebok2024}: la densidad de defectos estima la calidad relativa del documento inspeccionado, y la tasa de detección por inspector evidencia la complementariedad de los roles cuando dos inspectores distintos encuentran defectos disjuntos sobre el mismo material.
+
+\subsection{Gestión de requisitos}
+La gestión de la configuración del ERS comprende la identificación de versiones, el control de cambios y el establecimiento de líneas base: un estado del ERS formalmente aprobado que sirve de referencia para medir cambios posteriores \cite{iso15288,pohl2010}. Los requisitos, además de su descripción, portan atributos de gestión --fuente, prioridad, estabilidad, criterio de aceptación y dependencias, ya documentados para los 25 RF y 15 RNF de CarniCore en la Entrega 2A-- que permiten auditar el ciclo de vida de cada requisito de forma independiente de su contenido técnico.
+
+La trazabilidad de requisitos se clasifica en pre-\textit{traceability} (antes de que el requisito exista como tal: desde la necesidad del interesado hasta su formulación) y post-\textit{traceability} (desde el requisito aprobado hasta los artefactos de diseño, código y prueba que lo satisfacen), y dentro de esta última en trazabilidad hacia atrás (\textit{backward}, hacia la fuente u origen) y hacia adelante (\textit{forward}, hacia el caso de uso, la clase y la prueba) \cite{gotel1994traceability,clelandhuang2012traceability}. Una matriz de trazabilidad materializa ambas direcciones en una única estructura tabular que enlaza el interesado de origen con el requisito funcional, el caso de uso, el componente de diseño y el caso de prueba correspondientes \cite{wiegers2013softwarerequirements,clelandhuang2012traceability}.
+
+El proceso de gestión del cambio formalizado en esta práctica sigue el ciclo estándar de una Solicitud de Cambio (\textit{Request for Change}, RFC): registro de la solicitud con su justificación de negocio, análisis de impacto recorriendo la matriz de trazabilidad para identificar artefactos directos e indirectos afectados, decisión de una autoridad colegiada (el CCB) y, tras la aprobación, implementación del cambio y cierre con la actualización del historial de versiones del ERS \cite{iso15288,pmbok2021,wiegers2013softwarerequirements}. La volatilidad de requisitos --la proporción de requisitos que cambian, se agregan o se eliminan tras la línea base-- es la métrica que cuantifica la estabilidad de un ERS a lo largo de este proceso \cite{pohl2010,wiegers2013softwarerequirements}.
+
+\subsection{Herramientas CASE para IR}
+Las herramientas CASE (\textit{Computer-Aided Software Engineering}) orientadas a Ingeniería de Requisitos se clasifican habitualmente en \textit{upper CASE}, centradas en el análisis y modelado temprano; \textit{lower CASE}, orientadas a la generación de código y prueba a partir de artefactos de diseño; e \textit{integrated CASE}, que cubren el ciclo de vida completo dentro de un mismo repositorio \cite{swebok2024,pohl2010}. Independientemente de la categoría, una herramienta CASE de gestión de requisitos madura debe ofrecer al menos: un repositorio centralizado de requisitos con historial de cambios, atributos personalizables por requisito, trazabilidad enlazable en ambas direcciones, mecanismos de \textit{baselining} o congelamiento de versión, un flujo de control de cambios con estados y aprobaciones, soporte de colaboración multiusuario y capacidad de integración con sistemas de control de versiones (VCS) externos \cite{wiegers2013softwarerequirements,clelandhuang2012traceability}. Los criterios de selección relevantes para un equipo de las dimensiones del Grupo C incluyen el costo de licenciamiento, la curva de aprendizaje y el grado de soporte nativo a la trazabilidad bidireccional sin necesidad de plugins de terceros; estas dimensiones se retoman de forma comparativa en la Sección~\ref{sec:comparativa-case} de este informe.
+
+\subsection{IR en procesos ágiles}
+En un contexto ágil, el equivalente funcional del ERS es el \textit{product backlog}: un conjunto priorizado de historias de usuario, cada una acompañada de sus criterios de aceptación \cite{cohn2004userstories}. Una historia de usuario bien formada sigue el formato Connextra (\textit{Como <rol>, quiero <funcionalidad>, para <beneficio>}) y se considera lista para desarrollo (\textit{Definition of Ready}) cuando cumple los criterios INVEST --independiente, negociable, valiosa, estimable, pequeña y verificable-- mientras que la \textit{Definition of Done} certifica que la implementación, la prueba y la documentación asociadas están completas \cite{cohn2004userstories}. El refinamiento continuo del backlog (\textit{grooming} o \textit{backlog refinement}) es el mecanismo ágil que sustituye a la revisión formal periódica de un ERS documental.
+
+El comportamiento esperado de una historia de usuario se especifica mediante Desarrollo Guiado por Comportamiento (BDD) en formato Gherkin (\textit{Dado--Cuando--Entonces}), un lenguaje semiestructurado legible tanto por el negocio como por las pruebas automatizadas que verifican la historia \cite{smart2014bdd}. En estos entornos, la trazabilidad se sostiene mediante el enlace directo entre la historia de usuario y sus pruebas de aceptación automatizadas, en lugar de una matriz explícita mantenida manualmente \cite{smart2014bdd,clelandhuang2012traceability}. Frente a la IR documental --que privilegia la completitud y la verificabilidad contractual del ERS antes de construir-- la IR ágil privilegia la retroalimentación temprana y tolera la incompletitud inicial del backlog a cambio de ciclos de validación más cortos; la Sección~\ref{sec:ir-tradicional-agil} de este informe discute en qué contextos del proyecto CarniCore conviene cada enfoque.
+
+%======================================================
+\section{Inspección Formal del ERS -- Método Fagan}
+%======================================================
+
+\subsection{Alcance de la inspección}
+La inspección cubre la totalidad del ERS de CarniCore vigente a la fecha de esta práctica (ERS\_CarniCore\_Entrega3\_2A.pdf, versión 3.0, 02/08/2026, 90 páginas): introducción y alcance, glosario, descripción general, las interfaces de usuario (19 mockups MU-01 a MU-19), los 25 requisitos funcionales (RF-01 a RF-25), los 15 requisitos no funcionales (RNF-01 a RNF-15), el requisito de explicabilidad, los requisitos legales, las 17 historias de usuario en formato Connextra con sus criterios de aceptación en Gherkin, las restricciones de diseño, el modelado UML completo (diagrama general de casos de uso, 12 CU textuales, diagrama de clases, 12 diagramas de secuencia, 6 diagramas de actividad, diagrama de estados, de componentes y de despliegue), la priorización combinada MoSCoW + Kano + WSJF y la matriz de trazabilidad extendida de 40 filas. Quedan fuera del alcance de esta inspección la corrección legal de fondo de la LOPDP y el código del MVP; solo se revisa su mención dentro del ERS.
+
+\subsection{Roles y planificación}
+Conforme al método de Fagan \cite{fagan1976inspections}, se asignan tres roles entre los tres integrantes del equipo (Moderador e Inspector 2 recaen en la misma persona, dado que el equipo cuenta con tres integrantes y no cuatro):
+
+\begin{longtable}{|p{3.5cm}|p{4cm}|p{6cm}|}
+\hline
+\textbf{Rol} & \textbf{Responsable} & \textbf{Función} \\
+\hline
+Moderador / Inspector 2 & Pérez Ruiz Carlos Andrés & Planifica y conduce la reunión, consolida el registro de defectos y revisa de forma independiente RNF, glosario, restricciones y matriz de trazabilidad extendida. Por regla acordada del equipo, no ejerce voto de calidad sobre los defectos que él mismo reporta como Inspector 2: esos defectos son validados por el resto del equipo, igual que los de cualquier otro inspector. \\
+\hline
+Lector & Calle Delgado Kamila Annabella & Parafrasea el ERS sección por sección durante la reunión; en la preparación individual se enfocó en requisitos funcionales, historias de usuario y casos de uso. \\
+\hline
+Inspector 1 & Macias Herrera Josthyn Esteban & Revisa de forma independiente el modelado UML, los mockups/interfaces y su trazabilidad hacia los RF. \\
+\hline
+\end{longtable}
+\vspace{-0.3cm}
+\textit{El doble rol de Carlos Pérez Ruiz se registra explícitamente para dejar constancia de que no hubo conflicto de interés no controlado durante la reunión (véase el acta, Sección~4.4).}
+
+\subsection{Preparación individual}
+Cada integrante realizó una lectura independiente completa del ERS antes de la reunión, aplicando las seis propiedades de calidad de ISO/IEC/IEEE~29148:2018 \cite{iso29148} (ambigüedad, completitud, consistencia, verificabilidad, trazabilidad, factibilidad) al bloque de secciones que le fue asignado:
+
+\begin{longtable}{|p{2.3cm}|p{3.9cm}|p{1.8cm}|p{1.2cm}|p{3.9cm}|}
+\hline
+\textbf{Inspector} & \textbf{Secciones revisadas} & \textbf{Estrategia} & \textbf{Tiempo} & \textbf{Hallazgos preliminares} \\
+\hline
+Lector (Kamila) & Introducción/alcance, 2.2--2.5, 3.2 (25 RF), 3.6 (17 HU), 4.1--4.2 (diagrama de CU y 12 CU textuales) & Lectura cruzada RF $\leftrightarrow$ CU $\leftrightarrow$ HU, verificando coincidencia de dependencias declaradas contra precondiciones de cada CU & 3 h & 6 hallazgos (D-01 a D-05, D-17) \\
+\hline
+Inspector 1 (Josthyn) & Interfaces (19 mockups), modelado UML completo (4.1--4.13), columna Mockup de la matriz (5.2) & Tabla cruzada ``ID de mockup en texto/figura'' vs. ``ID de mockup en la matriz de trazabilidad'', y ``CU con diagrama de secuencia'' vs. ``CU con diagrama de actividad'' & 4 h & 8 hallazgos (D-06 a D-13) \\
+\hline
+Inspector 2 (Carlos) & Glosario (1.3), restricciones (2.7), 15 RNF (3.3), restricciones de diseño (3.7), priorización y matriz de trazabilidad (5.1--5.2) & Verificación de unicidad de cada identificador (RD-XX, EV-XX, MU-XX) usado en el texto; recálculo manual de los totales de la tabla WSJF de la Sección~5.1 & 3.5 h & 6 hallazgos (D-14 a D-16, D-18, D-19), uno de ellos (D-08) coincidente con un hallazgo de Josthyn \\
+\hline
+\end{longtable}
+
+\subsection{Reunión de inspección -- Acta}
+
+\begin{longtable}{|p{4.5cm}|p{9.5cm}|}
+\hline
+\textbf{Campo} & \textbf{Contenido} \\
+\hline
+Fecha y hora & 03/08/2026, 20:00 -- 22:15 (hora Ecuador, GMT-5) \\
+\hline
+Duración & 2 horas 15 minutos \\
+\hline
+Modalidad y lugar & Sesión virtual (videollamada del equipo) \\
+\hline
+Asistentes (rol, nombre) & Carlos Andrés Pérez Ruíz (Moderador e Inspector 2); Calle Delgado Kamila Annabella (Lectora); Macias Herrera Josthyn Esteban (Inspector 1) \\
+\hline
+Secciones del ERS recorridas & Introducción y alcance; RF (25); HU (17); CU (12) y diagrama de casos de uso; interfaces y 19 mockups; modelado UML completo; RNF (15); restricciones; glosario; priorización MoSCoW+Kano+WSJF; matriz de trazabilidad (40 filas) \\
+\hline
+Modo de conducción & Lectura guiada por el Lector, con exposición de hallazgos por bloque temático (RF/HU/CU $\rightarrow$ Interfaces/UML $\rightarrow$ RNF/Trazabilidad); el Moderador controla que la discusión se limite a determinar si un hallazgo es o no un defecto real, sin rediseñar el documento en la propia reunión \\
+\hline
+Incidencias del proceso & Para el bloque RNF/Trazabilidad, Kamila asumió la moderación puntual para evitar que Carlos moderara su propia exposición como Inspector~2 \\
+\hline
+Defectos expuestos & 17 exposiciones durante los bloques temáticos (16 defectos únicos; D-08 fue señalado de forma independiente por Josthyn y por Carlos y se consolidó como un único ítem repetido), más 3 hallazgos adicionales de las preparaciones individuales de Kamila y Carlos (D-17, D-18, D-19) confirmados durante el cierre de la reunión: 19 defectos únicos en total \\
+\hline
+Defectos aceptados / descartados & 17 aceptados; 2 descartados (D-04, D-13; justificación en la Sección~4.5) \\
+\hline
+Distribución por severidad (aceptados) & Crítico: 2 (D-06, D-15); Mayor: 10 (D-01, D-02, D-07, D-08, D-09, D-10, D-14, D-17, D-18, D-19); Menor: 5 (D-03, D-05, D-11, D-12, D-16) \\
+\hline
+Observaciones & El documento tiene una base de requisitos funcionales sólida y bien trazada a evidencia de campo; los defectos detectados se concentran en la sincronización entre el catálogo de mockups, la matriz de trazabilidad extendida y la cobertura del modelado UML, no en la redacción de los requisitos en sí \\
+\hline
+Conclusiones y acuerdos & Se aprueba corregir los defectos Críticos (D-06, D-15) antes de cualquier entrega posterior por afectar directamente la trazabilidad; D-10, D-14 y D-19 quedan pendientes de una consulta breve al docente sobre el alcance exacto exigido por la rúbrica antes de decidir su corrección; el resto del documento (introducción, glosario salvo D-16 y D-19, requisitos legales, componente empírico) se considera de buena calidad y no requiere una segunda ronda \\
+\hline
+Firma del Moderador & Carlos Andrés Pérez Ruíz \\
+\hline
+\end{longtable}
+
+\subsection{Registro de defectos -- Anexo B}
+Se transcriben los 16 defectos únicos consolidados en la reunión (14 aceptados, 2 descartados con justificación), clasificados conforme a los criterios de ISO/IEC/IEEE~29148:2018 \cite{iso29148}. Cada descripción fue verificada por el equipo contra el ERS real (texto, matriz de trazabilidad y figuras de mockups) antes de esta consolidación final.
+
+\begin{longtable}{|p{0.6cm}|p{3cm}|p{2.5cm}|p{0.9cm}|p{4.3cm}|p{1.8cm}|}
+\hline
+\textbf{ID} & \textbf{Título / Ubicación} & \textbf{Tipo} & \textbf{Sever.} & \textbf{Descripción y justificación} & \textbf{Propuesta de corrección} \\
+\hline
+D-01 & RF-06 no declara su dependencia real de RF-04 (3.2, p.26) & Trazabilidad & Mayor & El campo Dependencias de RF-06 solo lista RF-03, pero su propio CU-04 (p.39) exige como precondición ``el animal fue pesado (CU-03)'', es decir, depende también de RF-04. La dependencia declarada no refleja el flujo que el propio ERS describe. & Agregar RF-04 a las dependencias de RF-06 y revisar el resto de fichas RF por el mismo patrón. \\
+\hline
+D-02 & Un requisito Must sin CU textual dedicado (4.2, p.38) & Completitud & Mayor & De los 17 RF Must, \textbf{RF-15} (Gestionar usuarios y roles) es el único que no tiene ningún caso de uso asociado: la fila 15 de la matriz de trazabilidad extendida (Sección~5.2) muestra ``--'' en la columna CU. (Nota de auditoría: la redacción original de este hallazgo incluía también RF-16, RF-20, RF-21 y RF-23; se corrigió tras verificar la matriz, que sí les asigna CU-06, CU-10, CU-01/CU-03 y CU-08 respectivamente.) & Redactar un CU dedicado a la gestión de usuarios y roles, o documentar explícitamente por qué RF-15 no lo requiere. \\
+\hline
+D-03 & Caso de uso ``Apply promotional discount'' sin RF que lo respalde (4.1, Figura~23, p.38) & Consistencia diagrama--texto & Menor & El diagrama general de casos de uso incluye ``Apply promotional discount'' (extends de ``Register sale/output''), pero ningún RF de la Sección~3.2 menciona descuentos promocionales. & Eliminar el caso de uso del diagrama si no corresponde al alcance actual, o agregar el RF correspondiente si es una funcionalidad prevista. \\
+\hline
+D-04 & Dependencia alterna de RF-07 (descartado) (3.2, p.27) & Completitud & -- & Se observó que RF-07 podría depender también de RF-04 según CU-06. El equipo consideró esta lectura demasiado especulativa y descartó el hallazgo: la dependencia principal declarada (RF-06) se considera suficiente. & No aplica (descartado). \\
+\hline
+D-05 & RF-14 sin criterio de aceptación medible (3.2, p.28) & Verificabilidad & Menor & El criterio de aceptación de RF-14 indica que el panel ``se actualiza automáticamente... sin requerir recarga manual'', pero no define un tiempo máximo, a diferencia de RF-04 y RF-11, que sí cuantifican (1~s, 3~s). & Agregar un umbral de tiempo explícito (por ejemplo, ``en menos de X segundos tras registrarse la venta''). \\
+\hline
+D-06 & Identificador de mockup MU-05 duplicado en dos pantallas distintas (3.1.1, Figuras~7 y 22, p.13 y p.24) & Nomenclatura / Trazabilidad & \textbf{Crítico} & La Figura~7 (``Guías de origen'') y la Figura~22 (``Roles'') están ambas etiquetadas MU-05. La matriz de trazabilidad (Sección~5.2) no referencia MU-05 en ninguna fila, confirmando que el catálogo de mockups quedó desincronizado. Verificado directamente contra ambas figuras del ERS. & Renumerar uno de los dos mockups (se sugiere que ``Roles'' pase a MU-20, ya que MU-19 está asignado a ``Comprobante de pesaje'') y actualizar toda referencia cruzada. \\
+\hline
+D-07 & Descripción de la Figura~11 no corresponde a su contenido (3.1.1, Figura~11, p.17) & Consistencia diagrama--texto & Mayor & La Figura~11 está titulada ``MU-09 Interfaz del módulo de guías de origen del Sistema'', pero la captura muestra el módulo ``Cámaras frigoríficas'' (temperatura, capacidad por cámara). El título parece copiado por error de la Figura~7. Verificado directamente contra la figura del ERS. & Corregir el título de la Figura~11 a ``MU-09 Interfaz del módulo de cámaras frigoríficas del Sistema''. \\
+\hline
+D-08 & La matriz de trazabilidad asigna a Reportes (RF-13/RF-14) un mockup que no es el real (5.2, filas 13--14, p.61; Figura~20, p.23) & Trazabilidad & Mayor & Las filas 13 y 14 de la matriz asocian RF-13 y RF-14 con el mockup MU-05, pero el mockup real de reportes está etiquetado MU-18 (Figura~20). Relacionado con D-06: al estar MU-05 ya duplicado, es probable que la matriz haya heredado un valor incorrecto. Señalado de forma independiente por Josthyn y por Carlos; consolidado como un único ítem. & Actualizar las filas 13 y 14 de la matriz para referenciar MU-18 en lugar de MU-05. \\
+\hline
+D-09 & Mockup MU-14 asociado a ``Precios'' en la matriz, pero su contenido real es ``Ventas'' (5.2, filas 18--19 y 22, p.61; Figura~16, p.20) & Trazabilidad & Mayor & Las filas 18, 19 y 22 (RF-18, RF-19, RF-22) citan MU-14, pero la Figura~16, etiquetada MU-14, corresponde al módulo de Ventas. No existe ningún mockup dedicado a Precios en el catálogo de 19 pantallas. Verificado directamente contra la figura del ERS. & Aclarar si el mockup de precios no llegó a diseñarse (y quitar o marcar como pendiente la referencia) o si se traspapeló con otro identificador. \\
+\hline
+D-10 & Diagramas de actividad solo para 6 de los 12 casos de uso detallados (4.5--4.10, p.52--57) & Completitud & Mayor & Existen diagramas de actividad únicamente para CU-01 a CU-06; CU-07 a CU-12 no los tienen, pese a que la Sección~4 se presenta como ``Modelado del Sistema con UML'' completo. \textbf{Requiere revisión adicional} contra el criterio exacto de la guía antes de decidir si se corrige. & Completar los 6 diagramas de actividad faltantes, o documentar explícitamente en la introducción de la Sección~4 que solo se ilustran flujos principales representativos. \\
+\hline
+D-11 & Títulos de sección duplicados literalmente entre 4.5 y 4.10 (índice y Sección~4, p.2 y p.52--57) & Documentación / Estructura & Menor & Las seis subsecciones dedicadas a diagramas de actividad se llaman todas ``Diagramas de actividad (flujos principales)'', sin diferenciar a qué CU corresponde cada una. & Renombrar cada subsección incluyendo el CU correspondiente (por ejemplo, ``4.5 Diagrama de actividad -- CU-01''). \\
+\hline
+D-12 & Placeholder sin completar: ``MU-01 a MU-XX'' (3.1.1, p.9) & Completitud / Redacción & Menor & El texto dice literalmente ``identificados MU-01 a MU-XX'', dejando un identificador de plantilla sin reemplazar por el valor real (MU-19, según el catálogo de figuras). & Reemplazar ``MU-XX'' por ``MU-19''. Corrección trivial; cerrado durante la propia reunión. \\
+\hline
+D-13 & Error visual (bug) visible en la captura del mockup MU-15, descartado del ERS (Figura~17, p.21) & Calidad de prototipo (fuera de alcance del ERS) & -- & La captura de ``Movimientos de inventario'' muestra un mensaje de error de JavaScript (``Cannot read properties of undefined...''). Verificado directamente contra la figura: el mensaje de error es efectivamente visible en la captura. El equipo decidió que es un defecto del prototipo visual, no del documento de requisitos, y lo descartó del registro formal. & No aplica al ERS (descartado); se recomienda reportarlo aparte a quien mantiene el prototipo del MVP. \\
+\hline
+D-14 & Tabla de RNF con menos atributos que la de RF, pese a que la matriz les asigna EV (3.3, p.32--34; 5.2, filas 26--40) & Consistencia estructural / Completitud & Mayor & La tabla de RNF solo tiene 3 columnas (ID, característica ISO, descripción cuantificable), mientras que la de RF tiene los 8 atributos de plantilla (incluida Fuente y EV). Sin embargo, la matriz de trazabilidad sí asigna un identificador EV a cada RNF (filas 26--40) sin que ese dato exista en la Sección~3.3. \textbf{Requiere revisión adicional} para decidir si se amplía la tabla o solo se documenta el origen del EV en la matriz. & Agregar como mínimo la columna ``Fuente/EV'' a la tabla de RNF de la Sección~3.3. \\
+\hline
+D-15 & Colisión del identificador EV-20 entre dos evidencias distintas (3.2, RF-20, p.31; 5.2, fila 27, p.60) & Nomenclatura / Trazabilidad & \textbf{Crítico} & RF-20 usa EV-20 como identificador local (mapeado a EV-12 en la matriz). La fila 27 de la matriz (RNF-02, Fiabilidad) usa directamente EV-20 para una evidencia distinta. El mismo código termina refiriéndose a dos evidencias diferentes según la parte del documento. & Unificar el esquema de identificadores de evidencia en una sola numeración y auditar reutilizaciones adicionales (se sugiere revisar también EV-16). \\
+\hline
+D-16 & Referencia a ``RD-2'' sin que las restricciones de diseño tengan identificador RD-XX (3.7, p.38) & Nomenclatura & Menor & El punto 5 de ``Restricciones de diseño'' menciona ``límites de vida útil (RD-2)'', pero la lista de restricciones (1 a 5) no está numerada con el prefijo RD- en ningún punto del documento. & Numerar la lista de restricciones de diseño como RD-1 a RD-5 y usar esos identificadores de forma consistente. \\
+\hline
+D-17 & RF-01 y RF-17 mapeados al mismo CU cuyo texto describe el flujo de RF-03 (4.2, p.38; 5.2, filas 1 y 17) & Trazabilidad & Mayor & RF-01 (Registrar proveedor) y RF-17 (Registrar georreferencia de proveedor/granja) están ambos mapeados en la matriz (filas 1 y 17) al mismo caso de uso, \textbf{CU-01}. Sin embargo, la especificación textual de CU-01 lo titula y describe explícitamente como ``Registrar ingreso de animal/lote'', con precondición ``existe una guía de origen registrada (RF-02)'', es decir, describe el flujo de RF-03, no el de RF-01 ni el de RF-17. Detectado por el Lector (Kamila) en su preparación individual y confirmado durante el cierre de la reunión del 03/08/2026. & Corregir el CU asociado a las filas 1 y 17 de la matriz (o redactar CU dedicados para RF-01 y RF-17) para que cada fila referencie el caso de uso cuyo texto coincide con el RF. \\
+\hline
+D-18 & Colisión del identificador EV-11 entre dos requisitos distintos (5.2, filas 18--19, p.61) & Nomenclatura / Trazabilidad & Mayor & Las filas 18 y 19 de la matriz de trazabilidad asignan el mismo identificador ``EV-11'' tanto a RF-18 (Consultar historial de precios) como a RF-19 (Configurar precios), pese a ser evidencias de campo distintas. Mismo patrón que D-15, pero entre dos RF en lugar de entre un RF y un RNF. Detectado por el Inspector 2 (Carlos) en su preparación individual y confirmado durante el cierre de la reunión del 03/08/2026. & Asignar un identificador EV propio y no reutilizado a cada uno de RF-18 y RF-19, y auditar el resto de la matriz por colisiones equivalentes. \\
+\hline
+D-19 & ``Guía de movilización'' definida en el glosario pero sin RF que la opere (1.3, p.5; 1.2, p.4; 2.7, p.9) & Completitud & Mayor & El glosario (Sección~1.3) define ``Guía de origen'' y ``Guía de movilización'' como documentos distintos, y el Alcance (Sección~1.2) declara que el sistema ``no emitirá guías de movilización... pero sí las almacenará y permitirá consultarlas''. Sin embargo, ningún RF de la Sección~3.2 opera sobre ``guía de movilización'' de forma distinta a RF-02 (Registrar guía de origen); la Sección~2.7 solo las menciona de forma conjunta (``guía de origen y movilización''). Detectado por el Inspector 2 (Carlos) en su preparación individual y confirmado durante el cierre de la reunión del 03/08/2026. & Redactar un RF dedicado al almacenamiento/consulta de guías de movilización, o documentar explícitamente que ese alcance quedó cubierto por RF-02 y ajustar la definición del glosario en consecuencia. \\
+\hline
+\end{longtable}
+
+\textit{Nota sobre D-17--D-19.} Estos tres defectos provienen de la preparación individual de Kamila y Carlos (Sección~4.3) y se confirmaron durante el cierre de la reunión del 03/08/2026 (Sección~4.4), en el momento en que Carlos verificó con el resto del equipo que no faltaba ningún hallazgo de las preparaciones individuales. Las métricas de la Sección~4.6 reflejan el total de 19 defectos únicos.
+
+\subsection{Métricas de inspección}
+
+\begin{longtable}{|p{6cm}|p{7.5cm}|}
+\hline
+\textbf{Métrica} & \textbf{Valor obtenido} \\
+\hline
+Defectos expuestos en la reunión del 03/08 (incluye 1 repetición) / únicos & 17 expuestos durante los bloques temáticos (16 únicos) más 3 confirmados durante el cierre de la reunión (D-17, D-18, D-19; véase la nota al final de la Sección~4.5): \textbf{19 únicos en total} \\
+\hline
+Defectos aceptados / descartados / cerrados de inmediato & 17 aceptados; 2 descartados (D-04, D-13); 1 cerrado en la propia reunión (D-12) \\
+\hline
+Distribución por severidad (sobre 17 aceptados) & Crítico: 2 (11.8\,\%); Mayor: 10 (58.8\,\%); Menor: 5 (29.4\,\%) \\
+\hline
+Distribución por tipo (sobre 19 únicos) & Trazabilidad: 7; Completitud: 5; Consistencia diagrama--texto/estructural: 3; Nomenclatura exclusiva: 1; Verificabilidad: 1; Documentación/Estructura: 1; Fuera de alcance del ERS: 1 \\
+\hline
+Distribución por inspector (hallazgos individuales antes de consolidar repetidos) & Lector (Kamila): 6 (30.0\,\%); Inspector 1 (Josthyn): 8 (40.0\,\%); Inspector 2 (Carlos): 6 (30.0\,\%) \\
+\hline
+Esfuerzo total (horas-persona) & Preparación: 3 + 4 + 3.5 = 10.5~h; reunión: 2.25~h $\times$ 3 personas = 6.75~h; \textbf{total: 17.25~h-persona} (D-17--D-19 fueron detectados dentro de estas mismas horas de preparación individual y confirmados en el cierre de la reunión, ya contabilizados) \\
+\hline
+Densidad de defectos por página & 19 defectos únicos / 90 páginas $\approx$ 0.21 defectos/página \\
+\hline
+Densidad de defectos por mockup & 6 defectos relacionados con mockups (D-06, D-07, D-08, D-09, D-12, D-13) / 19 mockups $\approx$ 0.32 defectos/mockup \\
+\hline
+Densidad de defectos por fila de matriz de trazabilidad & 5 defectos directamente de la matriz (D-08, D-09, D-15, D-17, D-18) / 40 filas = 0.125 defectos/fila \\
+\hline
+\end{longtable}
+
+\textbf{Interpretación.} La densidad más alta se sigue concentrando en los mockups (0.32 defectos/pantalla) y en la matriz de trazabilidad (0.125 defectos/fila), más que en los requisitos funcionales redactados en sí. Los tres defectos confirmados durante el cierre de la reunión (D-17, D-18, D-19) refuerzan esta lectura: D-17 y D-18 repiten el mismo patrón de colisión o desalineación de identificadores en la matriz que ya evidenciaban D-08, D-09 y D-15, mientras que D-19 aporta un ángulo distinto: una brecha de completitud entre el glosario y los RF, no relacionada con mockups ni con la matriz. Los dos defectos Críticos (D-06, D-15) siguen siendo los únicos de máxima severidad, ambos relacionados con identificadores duplicados o colisionados y no con el contenido conceptual de ningún requisito; el bloque Mayor (10 de 17 defectos aceptados, 58.8\,\%) confirma que la mayoría de los problemas del ERS son de sincronización entre artefactos (texto, mockups, matriz, glosario) y no de la calidad conceptual de los requisitos individuales. El bloque de RNF, con pocos defectos en cantidad, incluye uno estructural de fondo (D-14) que afecta a las 15 fichas por igual, por lo que su impacto relativo supera lo que sugiere el conteo simple.
+
+%======================================================
+\section{Correcciones Aplicadas}
+%======================================================
+Conforme al acuerdo de la reunión de inspección (Sección~4.4), el ERS de CarniCore aún no ha sido modificado: esta sección documenta únicamente las recomendaciones de corrección (retrabajo) derivadas del Anexo~B, pendientes de ejecución formal en la actualización a ERS~v1.1.
+
+\begin{longtable}{|p{1.1cm}|p{1.4cm}|p{2.5cm}|p{8.8cm}|}
+\hline
+\textbf{Defecto} & \textbf{Severidad} & \textbf{Estado} & \textbf{Recomendación de corrección} \\
+\hline
+D-01 & Mayor & Pendiente & Añadir RF-04 al campo Dependencias de RF-06; revisar el resto de fichas RF por el mismo patrón. \\
+\hline
+D-02 & Mayor & Requiere revisión adicional & Redactar un CU dedicado para RF-15 (gestión de usuarios y roles), o documentar explícitamente por qué no se incluyó. \\
+\hline
+D-03 & Menor & Pendiente & Quitar ``Apply promotional discount'' del diagrama de casos de uso, o crear el RF correspondiente si la funcionalidad está prevista. \\
+\hline
+D-05 & Menor & Pendiente & Definir un umbral de tiempo en el criterio de aceptación de RF-14. \\
+\hline
+D-06 & \textbf{Crítico} & Pendiente & Renumerar el mockup duplicado (Roles $\rightarrow$ MU-20) y actualizar toda mención cruzada. \\
+\hline
+D-07 & Mayor & Pendiente & Corregir el título de la Figura~11 a ``MU-09: Cámaras frigoríficas''. \\
+\hline
+D-08 & Mayor & Pendiente & Actualizar las filas 13--14 de la matriz para referenciar MU-18 en lugar de MU-05 (depende de resolver primero D-06). \\
+\hline
+D-09 & Mayor & Requiere revisión adicional & Confirmar si existe o no un mockup de precios; ajustar la matriz según corresponda. \\
+\hline
+D-10 & Mayor & Requiere revisión adicional & Completar los 6 diagramas de actividad faltantes, previa consulta sobre el alcance exigido por la rúbrica. \\
+\hline
+D-11 & Menor & Pendiente & Renombrar cada subsección 4.5--4.10 indicando el CU correspondiente. \\
+\hline
+D-12 & Menor & \textbf{Cerrado} & Reemplazar ``MU-XX'' por ``MU-19'' en la Sección~3.1.1. \\
+\hline
+D-14 & Mayor & Requiere revisión adicional & Ampliar la tabla de RNF con la columna Fuente/EV, previa consulta sobre alcance. \\
+\hline
+D-15 & \textbf{Crítico} & Pendiente & Unificar el esquema de identificadores EV en una sola numeración; auditar reutilizaciones adicionales (EV-16). \\
+\hline
+D-16 & Menor & Pendiente & Numerar la lista de restricciones de diseño como RD-1 a RD-5. \\
+\hline
+D-17 & Mayor & Pendiente & Corregir el CU asociado a las filas 1 y 17 de la matriz (o redactar CU dedicados para RF-01 y RF-17). \\
+\hline
+D-18 & Mayor & Pendiente & Asignar un identificador EV propio a cada uno de RF-18 y RF-19; auditar el resto de la matriz por colisiones equivalentes. \\
+\hline
+D-19 & Mayor & Requiere revisión adicional & Redactar un RF dedicado a guías de movilización, o documentar que ese alcance ya lo cubre RF-02 y ajustar el glosario. \\
+\hline
+\end{longtable}
+
+Los defectos D-04 y D-13 fueron descartados en la reunión (Sección~4.5) y no requieren retrabajo sobre el ERS: D-04 por considerarse una lectura demasiado especulativa de una dependencia implícita razonable, y D-13 por corresponder a un defecto del prototipo visual del MVP, fuera del alcance documental del ERS. Los defectos D-17, D-18 y D-19 (provenientes de la preparación individual y confirmados en el cierre de la reunión del 03/08/2026, según se documenta al final de la Sección~4.5) se incorporan a esta tabla con el mismo tratamiento que el resto de los defectos Mayores.
+
+\subsection{Tabla de corrección antes/después -- defectos Críticos y Mayores}
+Conforme al Paso 1 de la guía de la práctica, se documenta a continuación el texto exacto del ERS vigente (\textit{antes}) frente al texto propuesto de corrección (\textit{después}) para el 100\,\% de los defectos Críticos (2) y Mayores (10, incluidos D-17 y D-18). Esta tabla es la propuesta de corrección formal; su aplicación efectiva sobre el ERS queda pendiente de ejecución conjunta con los cambios que resulten del CCB (Sección~6), para publicarse en un único ERS~v1.1 con una sola línea base coherente. Para D-02, D-09, D-10, D-14 y D-19, marcados ``requiere revisión adicional'' en la tabla de la página anterior, el ``después'' documenta las opciones de corrección entre las que el equipo decidirá, en lugar de un texto único, por no existir aún un criterio de alcance confirmado con el docente.
+
+\begin{longtable}{|p{0.8cm}|p{1.1cm}|p{5.7cm}|p{5.7cm}|}
+\hline
+\textbf{Def.} & \textbf{Sever.} & \textbf{Texto/valor antes (ERS vigente)} & \textbf{Texto/valor después (propuesto)} \\
+\hline
+D-06 & \textbf{Crítico} & Figura~22 rotulada ``MU-05 Interfaz del módulo de roles del Sistema'' (colisiona con la Figura~7, también MU-05). & Figura~22 renumerada a ``MU-20 Interfaz del módulo de roles del Sistema''; actualizar toda referencia cruzada de MU-05 a Roles en el texto y en la matriz. \\
+\hline
+D-15 & \textbf{Crítico} & RF-20, campo Dependencias/EV: ``Dependencias: RF-07. EV-20 (confirmado con evidencia real de la segunda ronda, registrada como EV-12 en la matriz de trazabilidad extendida)''. Fila 27 de la matriz (RNF-02, Fiabilidad) usa también el identificador ``EV-20'' para una evidencia distinta. & Unificar numeración: la evidencia de RF-20 conserva un único identificador (EV-12, sin alias local ``EV-20''); la evidencia de la fila 27 (RNF-02) se renombra a un identificador propio no reutilizado (por ejemplo, EV-26). \\
+\hline
+D-01 & Mayor & RF-06, campo Dependencias: ``Dependencias: RF-03. EV-05.'' & ``Dependencias: RF-03, RF-04. EV-05.'' \\
+\hline
+D-02 & Mayor & Matriz Sección~5.2, fila 15 (RF-15: Gestionar usuarios y roles): columna CU~=~``--''. & Opción A: redactar CU-13 ``Gestionar usuarios y roles'' y completar la fila 15 con ``CU-13''. Opción B: mantener ``--'' y agregar una nota explícita en la Sección~4.2 justificando por qué RF-15 no requiere CU dedicado. Decisión pendiente de confirmación con el docente. \\
+\hline
+D-07 & Mayor & Figura~11: ``MU-09 Interfaz del módulo de guías de origen del Sistema''. & Figura~11: ``MU-09 Interfaz del módulo de cámaras frigoríficas del Sistema''. \\
+\hline
+D-08 & Mayor & Matriz Sección~5.2, filas 13--14 (RF-13, RF-14): columna Mockup~=~``MU-05''. & Filas 13--14: columna Mockup~=~``MU-18''. \\
+\hline
+D-09 & Mayor & Matriz Sección~5.2, filas 18--19 (RF-18, RF-19): columna Mockup~=~``MU-14''. & Opción A: si el mockup de precios existe pero no fue catalogado, incorporarlo como MU-20\footnote{Si D-06 ya reasigna MU-20 a ``Roles'', este mockup de precios tomaría el siguiente identificador libre, MU-21.} y referenciarlo en las filas 18--19. Opción B: si no fue diseñado, marcar las filas 18--19 como ``pendiente de diseño'' en vez de ``MU-14''. Decisión pendiente de confirmación con quien diseñó los mockups. \\
+\hline
+D-10 & Mayor & Sección~4, subsecciones 4.5--4.10: diagramas de actividad existentes solo para CU-01 a CU-06. & Opción A: completar los 6 diagramas de actividad faltantes (CU-07 a CU-12). Opción B: agregar una nota en la introducción de la Sección~4 aclarando que solo se ilustran flujos principales representativos. Decisión pendiente de confirmación con el docente sobre el alcance mínimo exigido. \\
+\hline
+D-14 & Mayor & Sección~3.3: tabla de RNF con 3 columnas (ID, característica ISO, descripción cuantificable). & Agregar como mínimo la columna ``Fuente/EV'' a la tabla de RNF de la Sección~3.3, igualando el nivel de atributos de la tabla de RF (Sección~3.2). Decisión pendiente sobre si además se agregan Prioridad/Estabilidad/Criterio de aceptación completos. \\
+\hline
+D-17 & Mayor & Matriz Sección~5.2, filas 1 y 17 (RF-01, RF-17): columna CU~=~``CU-01''; CU-01 (Sección~4.2) describe textualmente el flujo de RF-03. & Reasignar el CU correcto a las filas 1 y 17 de la matriz, o redactar CU dedicados para RF-01 (Registrar proveedor) y RF-17 (Registrar georreferencia). \\
+\hline
+D-18 & Mayor & Matriz Sección~5.2, filas 18--19 (RF-18, RF-19): ambas filas usan el identificador ``EV-11''. & Asignar un identificador EV propio y no reutilizado a cada uno de RF-18 y RF-19 (por ejemplo, conservar EV-11 para RF-18 y asignar EV-27 a RF-19). \\
+\hline
+D-19 & Mayor & Glosario (1.3) define ``Guía de movilización'' como documento distinto de ``Guía de origen''; Alcance (1.2) declara que el sistema la almacenará y permitirá consultarla; ningún RF de la Sección~3.2 la opera de forma distinta a RF-02. & Opción A: redactar un RF dedicado (por ejemplo, RF-26 ``Registrar y consultar guía de movilización''). Opción B: documentar en el glosario y en 1.2 que ese alcance quedó absorbido por RF-02, y ajustar la definición para no implicar un flujo separado. Decisión pendiente de confirmación con el docente. \\
+\hline
+\end{longtable}
+
+%======================================================
+\section{Gestión del Cambio y Comité de Control de Cambios (CCB)}
+%======================================================
+
+\subsection{Criterio de selección de las solicitudes de cambio}
+Conforme a la guía de la práctica, se tramitan tres solicitudes de cambio (RFC) de naturaleza distinta sobre el ERS de CarniCore: una RFC de alcance (incorporación de un nuevo requisito funcional), una RFC de calidad (modificación de un requisito no funcional existente) y una RFC de restricción o normativa. Al menos una de las tres debe originarse en un conflicto real detectado durante la inspección del Paso 1 o en la validación de la PE2; las restantes pueden tomarse de los escenarios publicados en el SGA para el curso.
+
+\subsection{Anexo C -- Formulario de Solicitud de Cambio (RFC)}
+Las tres instancias completan la estructura definida por la guía de la práctica. El contenido íntegro de cada formulario, con firma y membrete institucional, se conserva además en \texttt{03\_CCB/RFC-01.pdf}, \texttt{03\_CCB/RFC-02.pdf} y \texttt{03\_CCB/RFC-03.pdf}.
+
+\begin{longtable}{|p{4.5cm}|p{9.5cm}|}
+\hline
+\textbf{Campo} & \textbf{Contenido -- RFC-01 (Alcance)} \\
+\hline
+ID / Fecha / Solicitante y rol & RFC-01 / 03/08/2026 / Pérez Ruiz Carlos Andrés -- Moderador / Inspector~2 de la inspección Fagan \\
+\hline
+Defecto de origen & D-19 (Anexo~B), detectado en la preparación individual del Inspector~2 y confirmado en el cierre de la reunión del 03/08/2026 \\
+\hline
+Descripción del cambio & El glosario (Sección~1.3 del ERS) define ``Guía de movilización'' como documento distinto de ``Guía de origen'', y el Alcance (Sección~1.2) declara que el sistema la almacenará y permitirá consultarla; sin embargo, ningún RF de la Sección~3.2 la opera de forma distinta a RF-02. Se incorpora un nuevo requisito funcional dedicado. \\
+\hline
+Justificación de negocio & Sin un RF dedicado, el alcance declarado queda sin respaldo funcional verificable, comprometiendo el criterio de completitud (gatekeeper A4 de la rúbrica) y la auditabilidad regulatoria del sistema ante Agrocalidad. \\
+\hline
+Requisitos impactados (desde la matriz de trazabilidad) & Ninguno de los 25 RF existentes se modifica; se agrega la fila 41 (RF-26) a la matriz de trazabilidad extendida. \\
+\hline
+Artefactos impactados (CU, clases, mockups, pruebas) & Componente Backend-Guias (reutiliza el mismo backend que RF-02); sin impacto en mockups ni RNF existentes. \\
+\hline
+Costo estimado (horas-persona) & Bajo (reutiliza el componente backend de RF-02). \\
+\hline
+Riesgo asociado & Alta prioridad por ser gatekeeper de completitud; riesgo de implementación bajo-medio. Si no se aprueba, persiste una inconsistencia entre el alcance declarado y los RF especificados, detectable en cualquier auditoría posterior. \\
+\hline
+Recomendación técnica & Aprobar e incorporar RF-26 ``Registrar y consultar guía de movilización'' en ERS v1.1. \\
+\hline
+Decisión del CCB & Aprobado por unanimidad de los votantes habilitados (2 a favor / 0 en contra; el solicitante se abstiene). Véase \texttt{03\_CCB/Acta\_CCB.pdf}. \\
+\hline
+\end{longtable}
+
+\begin{longtable}{|p{4.5cm}|p{9.5cm}|}
+\hline
+\textbf{Campo} & \textbf{Contenido -- RFC-02 (Calidad / RNF)} \\
+\hline
+ID / Fecha / Solicitante y rol & RFC-02 / 03/08/2026 / Pérez Ruiz Carlos Andrés -- Moderador / Inspector~2 \\
+\hline
+Defecto de origen & D-14 (Anexo~B), detectado en la preparación individual del Inspector~2 sobre las 15 fichas de RNF \\
+\hline
+Descripción del cambio & La tabla de RNF (Sección~3.3) documenta solo 3 columnas (ID, característica ISO~25010, descripción cuantificable), mientras que la tabla de RF (Sección~3.2) documenta 8 atributos, incluida Fuente/EV; la matriz de trazabilidad ya asigna un EV a cada RNF (filas 26--40) sin que ese dato exista en la ficha propia del requisito. Se agrega la columna Fuente/EV a la tabla de RNF. \\
+\hline
+Justificación de negocio & La ausencia de la columna Fuente/EV impide verificar, desde la propia ficha del RNF, la evidencia de campo que lo sustenta, debilitando el criterio de trazabilidad y de consistencia estructural del ERS. \\
+\hline
+Requisitos impactados (desde la matriz de trazabilidad) & Los 15 RNF (RNF-01 a RNF-15); los valores de EV ya existentes en las filas 26--40 de la matriz no se modifican, solo se documentan también en la Sección~3.3. \\
+\hline
+Artefactos impactados (CU, clases, mockups, pruebas) & Ninguno fuera de la propia tabla de RNF del ERS. \\
+\hline
+Costo estimado (horas-persona) & Bajo (cambio documental). \\
+\hline
+Riesgo asociado & Media prioridad, mejora de consistencia estructural sin bloquear funcionalidad. Riesgo bajo si no se aprueba: se mantiene la asimetría entre las tablas de RF y RNF. \\
+\hline
+Recomendación técnica & Aprobar con alcance mínimo: agregar únicamente la columna Fuente/EV, dejando Prioridad/Estabilidad/Criterio de aceptación completos como mejora opcional para una futura revisión. \\
+\hline
+Decisión del CCB & Aprobado con alcance mínimo, por unanimidad de los votantes habilitados (2 a favor / 0 en contra). Véase \texttt{03\_CCB/Acta\_CCB.pdf}. \\
+\hline
+\end{longtable}
+
+\begin{longtable}{|p{4.5cm}|p{9.5cm}|}
+\hline
+\textbf{Campo} & \textbf{Contenido -- RFC-03 (Restricción / normativa)} \\
+\hline
+ID / Fecha / Solicitante y rol & RFC-03 / 03/08/2026 / Pérez Ruiz Carlos Andrés -- Moderador / Inspector~2 \\
+\hline
+Defecto de origen & D-16 (Anexo~B), detectado en la preparación individual del Inspector~2 sobre las restricciones de diseño \\
+\hline
+Descripción del cambio & El punto 5 de ``Restricciones de diseño'' (Sección~3.7) menciona explícitamente ``límites de vida útil (RD-2)'', pero la lista de restricciones (1 a 5) no está identificada con el prefijo ``RD-'' en ningún otro punto del documento. Se formaliza la numeración RD-1 a RD-5. \\
+\hline
+Justificación de negocio & Un identificador referenciado en el texto pero no declarado formalmente en su fuente rompe la trazabilidad interna del ERS y puede inducir a error al citar restricciones de diseño desde un RFC o un caso de prueba futuro. \\
+\hline
+Requisitos impactados (desde la matriz de trazabilidad) & Ninguno; las restricciones de diseño no forman parte de la matriz de trazabilidad extendida. \\
+\hline
+Artefactos impactados (CU, clases, mockups, pruebas) & Ninguno; corrección de nomenclatura sin efecto funcional. \\
+\hline
+Costo estimado (horas-persona) & Mínimo. \\
+\hline
+Riesgo asociado & Baja severidad (defecto Menor); riesgo de no aprobarse: la referencia ``RD-2'' queda huérfana indefinidamente. \\
+\hline
+Recomendación técnica & Aprobar y numerar la lista de restricciones de diseño como RD-1 a RD-5. \\
+\hline
+Decisión del CCB & Aprobado por unanimidad de los votantes habilitados (2 a favor / 0 en contra). Véase \texttt{03\_CCB/Acta\_CCB.pdf}. \\
+\hline
+\end{longtable}
+
+\subsection{Acta del Comité de Control de Cambios}
+El CCB se conforma con cuatro roles diferenciados; al contar el equipo con tres integrantes, Kamila Calle asume doble función (cliente y análisis de impacto), y Carlos Pérez -- solicitante de las tres RFC -- participa en la deliberación técnica pero no emite voto de calidad sobre sus propias solicitudes, conforme a la misma regla de conflicto de interés aplicada durante la inspección Fagan. El contenido íntegro y firmado del acta se conserva en \texttt{03\_CCB/Acta\_CCB.pdf}.
+
+\begin{longtable}{|p{4.5cm}|p{9.5cm}|}
+\hline
+\textbf{Campo} & \textbf{Contenido} \\
+\hline
+Fecha y asistentes (rol -- nombre) & 03/08/2026, 22:30--23:15 (hora Ecuador, GMT-5), inmediatamente después del cierre de la inspección Fagan del mismo día. Macías Herrera Josthyn Esteban -- Presidente del CCB; Calle Delgado Kamila Annabella -- Representante del cliente y Analista de impacto de trazabilidad; Pérez Ruiz Carlos Andrés -- Solicitante de RFC-01, RFC-02 y RFC-03, y Desarrollador \\
+\hline
+Agenda & Apertura y verificación de quórum; deliberación de RFC-01 (alcance), RFC-02 (calidad/RNF) y RFC-03 (restricción/normativa) en ese orden; votación consolidada y cierre con acuerdos. \\
+\hline
+Deliberación resumida -- RFC-01 & Carlos Pérez expone que el glosario y el Alcance del ERS comprometen al sistema a almacenar y permitir consultar guías de movilización, pero ningún RF vigente lo opera de forma distinta a RF-02. Kamila Calle confirma contra la matriz de trazabilidad que el impacto se limita a una fila nueva (fila 41), sin afectar mockups ni RNF existentes. Josthyn Macías señala que, al tratarse de un gatekeeper de completitud del ERS, la corrección no debe diferirse. \\
+\hline
+Decisión -- RFC-01 & Aprobado (2--0). Se autoriza la creación de RF-26 ``Registrar y consultar guía de movilización''. \\
+\hline
+Deliberación resumida -- RFC-02 & Carlos Pérez expone la asimetría entre la tabla de RF (8 atributos) y la de RNF (3 atributos), pese a que la matriz ya asigna un EV a cada RNF. Kamila Calle verifica que los 15 valores de EV necesarios (filas 26--40) ya existen y no requieren modificarse. El comité delibera entre ampliar la tabla por completo o aplicar el alcance mínimo señalado por el defecto original, y opta por el alcance mínimo. \\
+\hline
+Decisión -- RFC-02 & Aprobado con alcance mínimo (2--0): se agrega únicamente la columna Fuente/EV a la tabla de RNF. \\
+\hline
+Deliberación resumida -- RFC-03 & Carlos Pérez expone que ``RD-2'' se cita en el texto sin que la lista tenga identificadores formales. Josthyn Macías señala que, al no ser un RF ni un RNF, el cambio no impacta la matriz de trazabilidad ni otros artefactos, y que es de bajo riesgo y bajo esfuerzo. Kamila Calle no identifica objeciones desde la perspectiva de la Propietaria. \\
+\hline
+Decisión -- RFC-03 & Aprobado (2--0). Se autoriza numerar la lista de restricciones de diseño como RD-1 a RD-5. \\
+\hline
+Justificación, acciones, responsables y plazos & (1) Incorporar formalmente RF-26, la columna Fuente/EV de la tabla de RNF y la numeración RD-1 a RD-5 en la publicación de ERS~v1.1, junto con el resto de correcciones ya redactadas en la Sección~4.1 de este informe. (2) Actualizar \texttt{04\_Trazabilidad/matriz\_trazabilidad.xlsx} incorporando la fila~41 (RF-26 / CU-22 / HU-22 / CA-22 / EV-26 / Backend-Guias), manteniendo sin modificación las 40 filas existentes. (3) Los defectos D-02, D-09, D-10 y D-19 (opción B) permanecen fuera del alcance de este CCB y se tratarán en una fase posterior, previa consulta al docente. (4) El \texttt{CHANGELOG.md}, el historial de versiones del ERS y el tag anotado de Git deberán reflejar de forma consistente el paso ERS~v1.0~$\rightarrow$~v1.1. (5) Responsable de la incorporación técnica de los tres cambios sobre el ERS: Carlos Pérez, con revisión cruzada de Kamila Calle y Josthyn Macías antes de publicar ERS~v1.1. \\
+\hline
+Nueva versión resultante del ERS & ERS v1.0 $\rightarrow$ ERS v1.1, publicada tras la incorporación conjunta de los tres cambios aprobados en esta acta más las correcciones de la Sección~4.1 (defectos Crítico y Mayor). \\
+\hline
+Firmas de los asistentes & Macías Herrera Josthyn Esteban (Presidente del CCB); Calle Delgado Kamila Annabella (Representante del cliente / Analista); Pérez Ruiz Carlos Andrés (Solicitante / Desarrollador). Firmas ológrafas digitalizadas en \texttt{03\_CCB/Acta\_CCB.pdf}. \\
+\hline
+\end{longtable}
+
+\subsection{Consistencia de versión}
+La versión declarada en la portada del ERS actualizado, en su historial de revisiones, en el \texttt{CHANGELOG.md} del repositorio y en el tag anotado de Git debe coincidir en los cuatro artefactos: ERS v1.0 (línea base previa a esta práctica) $\rightarrow$ ERS v1.1 (línea base posterior a la resolución del CCB).
+
+%======================================================
+\section{Trazabilidad en Herramienta CASE}
+\label{sec:trazabilidad-case}
+%======================================================
+
+\subsection{Estructura del tablero}
+El equipo Grupo C administra la trazabilidad del ERS de CarniCore en una herramienta CASE de gestión (Jira o Trello), con un proyecto nombrado según el sistema del PFC y acceso otorgado a los tres integrantes y al docente. La estructura del backlog respeta el mínimo exigido por la guía de la práctica:
+
+\begin{itemize}[nosep]
+\item Al menos 4 Epics, organizados por área funcional del sistema CarniCore (por ejemplo: Recepción y trazabilidad de origen, Pesaje y despiece, Inventario en cámaras frigoríficas, Reportes y panel gerencial), agrupando los 25 RF documentados en la Entrega 2A.
+\item Al menos 15 Stories, una por requisito funcional, redactadas en formato Connextra a partir de las historias de usuario ya documentadas en el ERS.
+\item Al menos 2 Sub-tasks por criterio de aceptación, en al menos 5 de las historias, derivadas de los criterios Gherkin ya especificados para cada RF \textit{Debe tener}.
+\end{itemize}
+
+En caso de utilizarse Trello, la estructura equivalente son las listas Backlog / Análisis / Aprobado / Desarrollo / Hecho, con una tarjeta por requisito funcional y un checklist de criterios de aceptación por tarjeta.
+
+\subsection{Campos personalizados}
+Se configuran como mínimo dos campos personalizados sobre cada issue o tarjeta:
+
+\begin{longtable}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Campo} & \textbf{Propósito} \\
+\hline
+Prioridad MoSCoW & Reutiliza la clasificación Must/Should/Could/Won't ya asignada a cada RF en la Entrega 2A (Sección 5.1 del ERS). \\
+\hline
+Fuente del requisito & Referencia al stakeholder o documento de origen (por ejemplo: Propietaria -- Bloque 2, Pregunta 4), tomada directamente del atributo \textit{Fuente} de cada RF en el ERS. \\
+\hline
+Estado de verificación (valorado) & Indica si el requisito cuenta con prueba de aceptación automatizada asociada. \\
+\hline
+\end{longtable}
+
+\subsection{Trazabilidad bidireccional}
+Cada requisito se enlaza hacia atrás (etiqueta o campo hacia el stakeholder o documento fuente ya identificado en el ERS) y hacia adelante (enlace al caso de uso, la clase UML, el módulo y el caso de prueba correspondientes, ya documentados en la matriz de trazabilidad extendida de la Entrega 2A). Los requisitos que, tras enlazar el tablero, no cuenten con al menos un enlace en cada dirección se reportan explícitamente como requisitos huérfanos.
+
+\subsection{Matriz de trazabilidad (Stakeholder -- RF -- CU -- Módulo -- Prueba)}
+La siguiente tabla reproduce, en la forma exigida por la práctica, los 25 RF originales más el nuevo RF-26 (RFC-01), enlazados con su interesado de origen, caso de uso y componente/módulo, tal como constan en la matriz de trazabilidad extendida del ERS (\texttt{01\_ERS/ERS\_v1.1.pdf}, Sección~5.2). La columna ``Prueba'' se completará con el enlace a cada issue del tablero CASE una vez ejecutado el Paso~3 de esta práctica (véase la nota de la Sección~\ref{sec:evidenciacion-case} sobre el estado de esa evidencia):
+
+\begin{longtable}{|p{2.6cm}|p{1.3cm}|p{2.3cm}|p{2.6cm}|p{2.9cm}|}
+\hline
+\textbf{Stakeholder} & \textbf{RF} & \textbf{CU} & \textbf{Clase / Módulo} & \textbf{Prueba (tablero CASE)} \\
+\hline
+Propietaria & RF-01 & --\textsuperscript{d17} & Backend-Proveedores & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Propietaria & RF-02 & CU-02 & Backend-Guias & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Bodega & RF-03 & CU-01 & Backend-Ingresos & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Bodega & RF-04 & CU-03 & Backend-Pesaje & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Bodega & RF-05 & CU-03 & Backend-Pesaje & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Carniceros & RF-06 & CU-04 & Backend-Despiece & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Admin. gral. & RF-07 & CU-06 & Backend-Inventario & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Admin. gral. & RF-08 & CU-07 & Backend-VidaUtil & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Admin. gral. & RF-09 & CU-10 & Backend-Bajas & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Bodega/Cliente & RF-10 & CU-09 & Backend-Ventas & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Agrocalidad/Prop. & RF-11 & CU-08 & Backend-Trazabilidad & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Admin. gral. & RF-12 & CU-11 & Backend-Inventario & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Propietaria & RF-13 & CU-12 & Backend-Reportes & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Propietaria & RF-14 & CU-12 & Backend-Reportes & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Propietaria & RF-15 & -- (pendiente D-02) & Backend-Usuarios & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Propietaria & RF-16 & CU-06 & Backend-Inventario & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Admin. gral. & RF-17 & --\textsuperscript{d17} & Backend-Proveedores & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Propietaria & RF-18 & -- & Backend-Precios & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Propietaria & RF-19 & CU-03 & Backend-Precios & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Propietaria & RF-20 & CU-10 & Backend-Incidentes & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Bodega & RF-21 & CU-01/CU-03 & Cliente-Offline & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Bodega & RF-22 & CU-09 & Backend-Ventas & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Admin. gral. & RF-23 & CU-08 & Backend-Trazabilidad & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Bodega & RF-24 & CU-06 & Backend-Inventario & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Cliente & RF-25 & CU-08 & Backend-Trazabilidad & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+Propietaria & RF-26 & CU-22\textsuperscript{b} & Backend-Guias & \textit{pendiente de vincular en el tablero CASE, Paso 3} \\
+\hline
+\end{longtable}
+
+\footnotesize\textsuperscript{d17} Correspondencia CU pendiente por el defecto D-17 (Sección~4.5 y Anexo~B); corregida en la matriz del ERS~v1.1 (\texttt{01\_ERS/ERS\_v1.1.pdf}, Sección~5.2) retirando el enlace incorrecto a CU-01. \quad \textsuperscript{b} CU-22 es un placeholder acordado por el CCB para RF-26 (Acta, acuerdo final~1); su especificación detallada queda pendiente para la Entrega~4 (2B).\normalsize
+
+\subsection{Evidenciación}
+\label{sec:evidenciacion-case}
+\textbf{Estado al cierre de esta entrega:} el Paso~3 de la práctica (construcción del tablero Jira/Trello, configuración de campos personalizados y enlaces bidireccionales) no se ha ejecutado todavía sobre una cuenta real del equipo. Por lo tanto, no se incluyen en este ZIP capturas del tablero, del detalle de issues, del panel de estadísticas, ni el archivo \texttt{backlog\_export.csv}: incluir evidencia sintética de un tablero que no existe violaría el criterio de autenticidad A2 de la rúbrica. La carpeta \texttt{04\_Trazabilidad/} contiene, en su lugar, la matriz de trazabilidad completa (derivada directamente y de forma verificable del ERS v1.1) y un \texttt{README.md} que detalla exactamente los pasos pendientes para que el equipo genere esta evidencia antes de la entrega final.
+
+%======================================================
+\section{Línea Base del ERS con Git}
+%======================================================
+
+\subsection{Repositorio del equipo}
+El repositorio público del equipo se aloja en \url{https://github.com/cperezr3/ISR401-PFC-ERS-GrupoC}, con la siguiente estructura de carpetas, conforme a la Sección~7 de la Rúbrica PE4:
+
+\begin{verbatim}
+ISR401-PFC-ERS-GrupoC/
+  README.md
+  CHANGELOG.md
+  01_ERS/                  ERS_v1.0.pdf, ERS_v1.1.pdf, fuentes .tex
+  02_Inspeccion/           AnexoA_checklists/, AnexoB_registro_defectos.xlsx, metricas.xlsx
+  03_CCB/                  RFC-01.pdf, RFC-02.pdf, RFC-03.pdf, Acta_CCB.pdf
+  04_Trazabilidad/         matriz_trazabilidad.xlsx, backlog_export.csv, capturas/
+  05_Informe/              PE4_U4_CALLE_MACIAS_PEREZ.tex, .bib, .pdf, figuras/
+  06_Evidencias/           capturas_git/, fotos_sesion/, declaracion_IA.pdf
+\end{verbatim}
+
+\subsection{Contenido del README.md}
+El \texttt{README.md} del repositorio documenta el sistema, los integrantes y las instrucciones de compilación reproducibles:
+
+\begin{verbatim}
+# ISR401-PFC-ERS-GrupoC
+
+## Sistema
+CarniCore -- Sistema de Trazabilidad, Pesaje Inteligente e Inventario
+para Distribuidora de Cárnicos Pucayacu, La Maná, Cotopaxi.
+Proyecto Fin de Curso -- Ingeniería de Requerimientos [20303], UTEQ.
+
+## Integrantes -- Grupo C
+- Calle Delgado Kamila Annabella
+- Macias Herrera Josthyn Esteban
+- Perez Ruiz Carlos Andres
+
+## Estructura de carpetas
+Ver el árbol de directorios en la Sección 8 del informe PE4
+(05_Informe/PE4_U4_CALLE_MACIAS_PEREZ.pdf).
+
+## Compilación del informe
+Compilador: pdfLaTeX (TeX Live 2023 o superior / MiKTeX equivalente).
+Archivo principal: 05_Informe/main.tex
+Dependencias: referencias.bib (BibTeX, estilo plain), paquetes
+longtable, booktabs, hyperref, fancyhdr, tabularx (todos disponibles
+en una instalación estándar de TeX Live / MiKTeX).
+
+Orden de comandos:
+    pdflatex main.tex
+    bibtex main
+    pdflatex main.tex
+    pdflatex main.tex
+\end{verbatim}
+
+\subsection{Commits, tag anotado y CHANGELOG}
+El ERS actualizado se sube con mensajes de commit semánticos (por ejemplo, \texttt{docs(ers): v1.1 - aplicar cambios CCB semana 14}), con un mínimo de 8 commits distribuidos entre los tres integrantes del equipo. La línea base se publica mediante un tag anotado:
+
+\begin{verbatim}
+git tag -a baseline-v1.1 -m "Baseline aprobada por CCB"
+git push origin baseline-v1.1
+\end{verbatim}
+
+El \texttt{CHANGELOG.md} sigue el formato \texttt{[Versión] -- [Fecha] / Añadido / Cambiado / Eliminado}, con una entrada por cada RFC aprobado por el CCB:
+
+\begin{verbatim}
+# CHANGELOG
+
+## [1.1] - Semana 14
+### Añadido
+### Cambiado
+### Eliminado
+(cada subsección se completa con el identificador de la RFC aprobada
+que origina el cambio correspondiente)
+
+## [1.0] - Entrega 2A
+### Añadido
+- ERS completo: 25 RF, 15 RNF, modelado UML, matriz de trazabilidad
+  extendida (40 filas), componente empírico.
+\end{verbatim}
+
+\subsection{Evidenciación del historial}
+\textbf{Estado al cierre de esta entrega:} el Paso~4 (publicación de la línea base en el repositorio público, con $\geq$8 commits distribuidos, tag anotado \texttt{baseline-v1.1} y capturas de \texttt{git log --oneline --graph --decorate} / \texttt{git tag -n}) no se ha ejecutado todavía. Los documentos de esta entrega (ERS~v1.1, matriz de trazabilidad, RFC, Acta CCB) están listos para ser subidos y etiquetados; la carpeta \texttt{06\_Evidencias/capturas\_git/} incluye un \texttt{README.md} con los comandos exactos y el orden de ejecución para que el equipo genere esta evidencia real antes de la entrega final, conforme al criterio de autenticidad A2 de la rúbrica.
+
+%======================================================
+\section{Comparativa de Herramientas CASE}
+\label{sec:comparativa-case}
+%======================================================
+Se comparan cuatro herramientas CASE de gestión de requisitos con relevancia para un proyecto de las características de CarniCore: Jira (con complementos de trazabilidad), IBM DOORS Next, Jama Connect y ReqView. El juicio de cada celda es propio del equipo, sustentado en la documentación pública de cada proveedor y en fuentes comparativas independientes \cite{clelandhuang2012traceability,wiegers2013softwarerequirements}.
+
+\begin{longtable}{|p{2.6cm}|p{2.6cm}|p{2.6cm}|p{2.6cm}|p{2.6cm}|p{2.6cm}|}
+\hline
+\textbf{Criterio} & \textbf{Jira} & \textbf{IBM DOORS Next} & \textbf{Jama Connect} & \textbf{ReqView} \\
+\hline
+Funcionalidades de IR & Orientada a issues y sprints; la gestión de requisitos como tal requiere convención de uso (Epics/Stories) más que campos nativos de RM. & Gestión de requisitos formal nativa, con atributos, líneas base y control de versiones de grado industrial. & Gestión de requisitos nativa con enfoque de \textit{Live Traceability}: visibilidad en tiempo real de relaciones y del impacto de cada cambio. & Gestión documental estructurada de requisitos, riesgos y pruebas en un mismo repositorio, orientada a proyectos pequeños y medianos. \\
+\hline
+Trazabilidad & Requiere plugins de terceros (por ejemplo, para exportar matrices); la trazabilidad nativa es limitada a enlaces entre issues. & Trazabilidad de grado auditor, con matrices y análisis de impacto integrados; es el estándar de facto en industrias reguladas. & Trazabilidad bidireccional fuerte y visual, pensada para auditorías de cumplimiento (ISO 26262, IEC 62304 y equivalentes). & Enlace fino entre cada requisito, riesgo y caso de prueba, con generación de matrices de trazabilidad completas. \\
+\hline
+Colaboración & Colaboración ágil fluida (comentarios, menciones, tableros compartidos); es su punto más fuerte. & Colaboración funcional pero menos ágil; pensada para revisiones formales más que para iteración diaria. & Colaboración moderna entre roles no técnicos y técnicos (clientes, ingeniería, pruebas), con interfaz relativamente accesible. & Colaboración más limitada; pensada para equipos pequeños con flujo documento-céntrico. \\
+\hline
+Integración con VCS & Integración nativa robusta con Git/GitHub/Bitbucket. & Integración con Git disponible mediante el ecosistema IBM Engineering Lifecycle Management, con configuración más compleja. & Integración documentada con Git y con Jira, útil para equipos híbridos ágil/RM. & Integración con Git disponible pero orientada a exportación de artefactos, no a issues vinculados. \\
+\hline
+Costo & Bajo; plan gratuito viable para equipos pequeños como el del PFC. & Alto; licenciamiento de nivel empresarial, poco accesible para un proyecto académico. & Medio-alto; orientado a organizaciones con necesidades de cumplimiento regulatorio. & Medio-bajo; existen planes accesibles para equipos pequeños y despliegue local. \\
+\hline
+Curva de aprendizaje & Baja para el uso ágil básico; moderada si se fuerza su uso como herramienta de RM formal. & Alta; requiere formación específica y familiaridad con el ecosistema IBM Jazz. & Moderada; interfaz más accesible que DOORS pero con una lógica de \textit{Live Traceability} que requiere adaptación. & Baja-moderada; su lógica documento-céntrica es más cercana a la forma en que el equipo ya organiza el ERS. \\
+\hline
+\end{longtable}
+
+\subsection{Recomendación argumentada para el PFC del equipo}
+Para el estado actual del proyecto CarniCore --un equipo de tres integrantes, sin requisitos de certificación regulatoria formal, y con un ERS ya estructurado en RF/RNF con atributos completos-- Jira resulta la opción más adecuada para el Paso 3 de esta práctica: su costo nulo para equipos pequeños, su curva de aprendizaje baja y su integración nativa con Git permiten construir Epics, Stories y Sub-tasks directamente sobre los 25 RF ya documentados sin fricción operativa. Herramientas como IBM DOORS Next o Jama Connect ofrecen una trazabilidad de auditoría superior, pero su costo y complejidad solo se justifican si CarniCore avanzara hacia un contexto regulado (por ejemplo, certificación sanitaria formal ante Agrocalidad de los propios registros del sistema), escenario que excede el alcance declarado en la Sección~1.2 del ERS.
+
+%======================================================
+\section{IR Tradicional frente a IR Ágil}
+\label{sec:ir-tradicional-agil}
+%======================================================
+
+\begin{longtable}{|p{2.6cm}|p{5.6cm}|p{5.6cm}|}
+\hline
+\textbf{Dimensión} & \textbf{IR tradicional (documental)} & \textbf{IR ágil} \\
+\hline
+Documentación & ERS único y exhaustivo, con 25 RF y 15 RNF especificados con ocho atributos antes de iniciar el desarrollo, como en la Entrega 2A de CarniCore. & Backlog vivo de historias de usuario en formato Connextra con criterios Gherkin, que se detalla justo antes de cada iteración (\textit{just-in-time}). \\
+\hline
+Gestión del cambio & Proceso formal vía RFC y CCB, con análisis de impacto sobre una matriz de trazabilidad y una línea base versionada, como el ejecutado en la Sección~6 de este informe. & El cambio se absorbe mediante repriorización continua del backlog durante el \textit{grooming}; no existe un CCB formal para cada ajuste. \\
+\hline
+Participación de \mbox{stakeholders} & Concentrada en sesiones de elicitación y validación puntuales (entrevistas, CCB); la propietaria de CarniCore participa en hitos definidos. & Continua, idealmente con un Product Owner disponible de forma permanente para el equipo. \\
+\hline
+Herramientas & Herramientas de RM formal (DOORS, Jama) o un ERS documental versionado en Git, como el de este proyecto. & Tableros ágiles (Jira, Trello) con historias, sprints y \textit{Definition of Done}. \\
+\hline
+Velocidad & Más lenta al inicio (elicitación y especificación exhaustivas antes de construir), pero con menor retrabajo de alcance. & Más rápida para obtener una primera versión funcional, a costa de mayor retrabajo si el backlog inicial estaba incompleto. \\
+\hline
+Escalabilidad & Escala bien a equipos grandes y distribuidos, y a contextos con requisitos regulatorios o contractuales estrictos. & Escala mejor a equipos pequeños y autoorganizados; requiere marcos adicionales (SAFe, LeSS) para escalar a múltiples equipos. \\
+\hline
+\end{longtable}
+
+\subsection{Discusión contextual para CarniCore}
+El proyecto CarniCore combina, de hecho, ambos enfoques a lo largo del curso: el ERS documental exhaustivo de la Entrega 2A satisface la necesidad de un contrato verificable con la propietaria de la distribuidora y con el docente evaluador, mientras que el Paso 3 de esta misma práctica traslada ese mismo conjunto de requisitos a un backlog ágil en Jira para la fase de construcción del MVP. La IR documental es la más adecuada mientras el requisito regulatorio (trazabilidad ante Agrocalidad, cumplimiento de la LOPDP) domine el riesgo del proyecto; la IR ágil resulta más adecuada una vez que el MVP entra en construcción iterativa con retroalimentación semanal de la propietaria y del personal de bodega, donde el costo de mantener un ERS documental sincronizado en cada sprint superaría su beneficio.
+
+%======================================================
+\section{Conclusiones Críticas}
+%======================================================
+Las cinco conclusiones siguientes integran los cuatro temas de la unidad --validación, gestión del cambio, trazabilidad en herramienta CASE y línea base con Git-- interpretando los resultados propios obtenidos por el equipo durante la ejecución de esta práctica sobre el ERS de CarniCore:
+
+\begin{enumerate}[nosep]
+\item \textit{(Inspección Fagan)} La densidad de 0.21 defectos/página (Sección~4.7) es baja en términos absolutos, pero se concentra de forma desproporcionada en los artefactos de integración del ERS -- mockups (0.32 defectos/pantalla) y matriz de trazabilidad (0.125 defectos/fila) -- frente a la redacción de los requisitos individuales. Esto indica que la Entrega~2A de CarniCore tiene una base de requisitos madura en su contenido conceptual, pero un proceso de sincronización entre artefactos (texto, figuras, matriz) todavía manual y propenso a desalineaciones, exactamente el tipo de defecto que una inspección Fagan está diseñada para exponer antes de que se propague a fases posteriores del ciclo de vida.
+\item \textit{(Gestión del cambio y CCB)} El análisis de impacto de las tres RFC, sustentado en la matriz de trazabilidad extendida y no en una estimación a ojo, anticipó correctamente el alcance real de cada cambio: RFC-01 requirió una única fila nueva (41) sin afectar mockups ni RNF existentes, RFC-02 confirmó que los 15 valores de EV ya existían y solo faltaba documentarlos, y RFC-03 confirmó que la corrección no tenía ningún punto de contacto con la matriz. Que las tres RFC se hayan podido aprobar sin abrir un segundo análisis de impacto durante la propia reunión del CCB es evidencia indirecta de que la matriz de trazabilidad del ERS, pese a sus defectos de sincronización, es suficientemente confiable como insumo de decisión.
+\item \textit{(Trazabilidad en herramienta CASE)} Al cierre de esta entrega el Paso~3 no se ha ejecutado sobre una cuenta real del equipo (Sección~\ref{sec:evidenciacion-case}), por lo que no es posible todavía cuantificar la proporción de requisitos huérfanos en el tablero. Sin embargo, la propia construcción de la matriz de la Sección~\ref{sec:trazabilidad-case} ya adelanta una señal: dos de los 26 RF (RF-01 y RF-17, defecto D-17) llegan a esta fase sin un caso de uso correctamente enlazado, y RF-15 (D-02) sin caso de uso en absoluto. Es previsible que estos mismos requisitos aparezcan como huérfanos o con enlaces incompletos en el tablero CASE una vez construido, lo que confirmaría que la trazabilidad hacia adelante del ERS es más frágil que su trazabilidad hacia atrás (fuente/stakeholder), consistentemente documentada para los 26 RF.
+\item \textit{(Línea base con Git)} La línea base ERS~v1.0~$\to$~v1.1 tampoco se ha publicado todavía en el repositorio (Sección~8.5), por lo que el equipo no cuenta aún con un historial de commits verificable para sustentar cuantitativamente el Factor de Ajuste Individual. Lo que sí es verificable en esta entrega es la distribución de la autoría intelectual del trabajo: los tres integrantes participaron en roles diferenciados y no intercambiables en la inspección Fagan (Sección~4.2) y en el CCB (Sección~6.3), lo que constituye una base sólida para una distribución de commits equilibrada una vez que el equipo materialice esos aportes en el repositorio.
+\item \textit{(Integradora)} El ERS documental de CarniCore demuestra, a través de esta práctica, estar bien preparado para sostener el contrato de requisitos con la propietaria y con el docente evaluador (25 RF y 15 RNF con atributos completos, matriz de trazabilidad auditable, proceso formal de cambio), pero todavía no para una migración directa y sin fricción hacia una gestión ágil del backlog: los mismos defectos de sincronización que la inspección Fagan expuso (mockups, matriz, EV duplicados) son precisamente el tipo de inconsistencia que un backlog ágil, sin la disciplina de una inspección formal previa, tendería a heredar y no a corregir. La recomendación del equipo (Sección~9.2) de usar el propio ERS ya depurado como fuente única de verdad al construir el tablero Jira, en lugar de reconstruir el backlog desde cero, es la lectura práctica de esta conclusión.
+\end{enumerate}
+
+%======================================================
+\section{Distribución del Trabajo}
+%======================================================
+La siguiente tabla documenta los roles efectivamente desempeñados por cada integrante en los pasos ya ejecutados de esta práctica (inspección Fagan y CCB), verificables contra las Secciones~4 y~6 de este mismo informe y contra las firmas de \texttt{03\_CCB/Acta\_CCB.pdf}. \textbf{Nota de verificación pendiente:} dado que la línea base de Git aún no se ha publicado (Sección~8.5), la columna de aportes no puede contrastarse todavía contra un historial de commits real; el Factor de Ajuste Individual (FAI) de la Rúbrica PE4 deberá recalcularse una vez publicado el repositorio, sustituyendo esta descripción cualitativa por el conteo real de commits y líneas por integrante.
+
+\begin{longtable}{|p{4cm}|p{3.8cm}|p{6.2cm}|}
+\hline
+\textbf{Integrante} & \textbf{Rol(es) desempeñados} & \textbf{Aportes principales (a contrastar con el historial de commits una vez publicado)} \\
+\hline
+Calle Delgado Kamila Annabella & Lectora (inspección Fagan); Representante del cliente y Analista de impacto de trazabilidad (CCB) & Preparación individual sobre RF/HU/CU (3~h, 6 hallazgos: D-01 a D-05, D-17); moderación puntual del bloque RNF/Trazabilidad durante la reunión de inspección; verificación del impacto de las tres RFC contra la matriz de trazabilidad; voto en las tres decisiones del CCB. \\
+\hline
+Macias Herrera Josthyn Esteban & Inspector 1 (inspección Fagan); Presidente del CCB & Preparación individual sobre modelado UML, interfaces y mockups (4~h, 8 hallazgos: D-06 a D-13); mayor volumen de hallazgos individuales del equipo (40\,\%); conducción de la deliberación y votación de las tres RFC como Presidente del CCB. \\
+\hline
+Perez Ruiz Carlos Andres & Moderador e Inspector 2 (inspección Fagan); Solicitante de RFC-01/02/03 y Desarrollador (CCB) & Preparación individual sobre RNF, restricciones, glosario y matriz extendida (3.5~h, 6 hallazgos: D-14 a D-16, D-18, D-19); consolidación del registro de defectos (Anexo~B) y de las métricas de inspección; redacción de las tres RFC y responsable designado por el CCB de la incorporación técnica de los cambios sobre ERS~v1.1 (con revisión cruzada de Kamila Calle y Josthyn Macías). \\
+\hline
+\end{longtable}
+
+%======================================================
+\section{Anexos D, E y F}
+%======================================================
+
+\subsection*{Anexo D -- Exportación CSV del backlog}
+\textbf{Pendiente.} El archivo \texttt{backlog\_export.csv} se generará desde la herramienta CASE (Jira o Trello) una vez ejecutado el Paso~3 sobre una cuenta real del equipo (Sección~\ref{sec:evidenciacion-case}). No se incluye en esta entrega un CSV sintético, conforme al criterio de autenticidad A2 de la rúbrica; \texttt{04\_Trazabilidad/README.md} detalla el procedimiento exacto para generarlo.
+
+\subsection*{Anexo E -- Capturas del tablero CASE y del repositorio Git}
+\textbf{Pendiente.} Las capturas del tablero CASE (tablero completo, detalle de $\geq$3 issues, panel de estadísticas) y del repositorio Git (\texttt{git log --oneline --graph --decorate}, \texttt{git tag -n}) se incorporarán una vez ejecutados los Pasos~3 y~4 sobre las cuentas reales del equipo. Las carpetas \texttt{04\_Trazabilidad/capturas/} y \texttt{06\_Evidencias/capturas\_git/} contienen sendos \texttt{README.md} con los pasos exactos pendientes, conforme al criterio de autenticidad A2 de la rúbrica.
+
+\subsection*{Anexo F -- Referencias IEEE y declaración de uso de IA}
+Conforme a la regla de citación de la Sección~3 de la Rúbrica PE4, la siguiente tabla declara la herramienta de inteligencia artificial utilizada durante la elaboración de este informe, la tarea específica en la que se empleó y la verificación crítica realizada por el equipo. El detalle completo de esta declaración, firmado por los tres integrantes, se conserva en \texttt{06\_Evidencias/declaracion\_IA.pdf}.
+
+\begin{longtable}{|p{3.2cm}|p{3.5cm}|p{3.8cm}|p{3.6cm}|}
+\hline
+\textbf{Herramienta / versión} & \textbf{Tarea asistida} & \textbf{Fragmento afectado} & \textbf{Verificación realizada por el equipo} \\
+\hline
+Asistente de IA (Claude, Anthropic) & Consolidación editorial: aplicación mecánica de las correcciones ya redactadas por el equipo (Anexo~B, Sección~4.1) al código fuente LaTeX del ERS para producir ERS\_v1.1; transcripción de la matriz de trazabilidad ya existente en el ERS a la Sección~7.4 de este informe; redacción de las Conclusiones Críticas (Sección~11) a partir de las métricas y decisiones ya documentadas por el equipo; compaginación y compilación LaTeX/BibTeX del documento final. & Sección~5.4/8.1 del ERS (correcciones D-01 a D-18, RF-26, columna Fuente/EV, RD-1--RD-5); Sección~7.4 (matriz); Sección~11 (conclusiones); \texttt{README.md} y \texttt{CHANGELOG.md} del repositorio. & El equipo verificó cada corrección aplicada contra el Anexo~B y el Acta del CCB antes de aceptar ERS\_v1.1; verificó que la matriz transcrita coincide fila por fila con la matriz original de la Entrega~2A; y revisó que las conclusiones interpretan datos y decisiones efectivamente producidos por el equipo, sin introducir hallazgos, defectos, RFC ni resultados de herramienta CASE no ejecutados. \\
+\hline
+\end{longtable}
+\vspace{-0.3cm}
+\textit{El equipo declara que la inspección Fagan, la deliberación y votación del CCB, y la redacción original de los defectos (Anexo~B) y de las tres RFC fueron realizadas por los tres integrantes, sin asistencia de IA en su contenido sustantivo; la asistencia de IA se limitó a las tareas editoriales descritas en la tabla anterior, sobre material ya producido por el equipo. Firma de los integrantes: campo a completar por el equipo antes de la entrega final.}
+
+%======================================================
+\newpage
+\bibliographystyle{plain}
+\bibliography{referencias}
+
+\end{document}
